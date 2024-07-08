@@ -28,4 +28,17 @@ def nada_main():
         Output(b, "intercept_output", party1)
     ]
 
-# Note: Ensure that the division operation and sum aggregation work correctly within the NADA DSL.
+# Note: The following section is illustrative and will not run in the NADA DSL environment as is.
+# It is meant to explain how to call the function and what inputs are expected.
+
+if __name__ == "__main__":
+    # Example input and expected output (for demonstration purposes only)
+    x_values = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    y_values = [2, 4, 5, 4, 5, 7, 8, 9, 10, 12]
+
+    # We can't use direct values with the Input class in NADA DSL, so this part is illustrative.
+    # In a real scenario, these values would be provided by the NADA environment.
+
+    print("The nada_main function expects secret inputs x and y from a defined party.")
+    print("For instance, inputs would be provided as SecretInteger through the NADA DSL framework.")
+    print("Once executed, the outputs would be the slope and intercept of the linear regression model.")
