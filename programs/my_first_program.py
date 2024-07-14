@@ -1,44 +1,43 @@
+# Import the necessary libraries
 from nada_dsl import *
+import random
 
 def nada_main():
-    num_data_points = 10
-    
-    # Define party
-    party1 = Party(name="Party1")
-    
-    # Collect secret data points (x, y) from the party
-    x_values = [SecretInteger(Input(name=f"x_{i}", party=party1)) for i in range(num_data_points)]
-    y_values = [SecretInteger(Input(name=f"y_{i}", party=party1)) for i in range(num_data_points)]
-    
-    # Compute the sums required for linear regression
-    sum_x = sum(x_values)
-    sum_y = sum(y_values)
-    sum_xx = sum([x * x for x in x_values])
-    sum_xy = sum([x * y for x, y in zip(x_values, y_values)])
-    
-    # Calculate slope (m) and intercept (b) of the line y = mx + b
-    n = SecretInteger(num_data_points)
-    denominator = n * sum_xx - sum_x * sum_x
-    m = (n * sum_xy - sum_x * sum_y) / denominator
-    b = (sum_y * sum_xx - sum_x * sum_xy) / denominator
-    
-    # Return the slope and intercept as outputs
-    return [
-        Output(m, "slope_output", party1),
-        Output(b, "intercept_output", party1)
-    ]
+    num_parties = 100  # Number of participants (parties)
+    num_tickets = 10   # Number of tickets each participant can submit
+    max_number = 50    # Maximum number for each ticket
 
-# Note: The following section is illustrative and will not run in the NADA DSL environment as is.
-# It is meant to explain how to call the function and what inputs are expected.
+    # Define parties (participants)
+    parties = [Party(name=f"Party{i+1}") for i in range(num_parties)]
 
-if __name__ == "__main__":
-    # Example input and expected output (for demonstration purposes only)
-    x_values = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-    y_values = [2, 4, 5, 4, 5, 7, 8, 9, 10, 12]
+    # Generate random tickets for each participant
+    tickets = [[random.randint(1, max_number) for _ in range(num_tickets)] for _ in range(num_parties)]
 
-    # We can't use direct values with the Input class in NADA DSL, so this part is illustrative.
-    # In a real scenario, these values would be provided by the NADA environment.
+    # Define secret inputs for tickets
+    outputs = []
+    for i in range(num_parties):
+        for j in range(num_tickets):
+            ticket = SecretInteger(Input(name=f"ticket_{i}_{j}", party=parties[i], value=tickets[i][j]))
+            outputs.append(Output(ticket, f"ticket_output_{i}_{j}", parties[i]))
 
-    print("The nada_main function expects secret inputs x and y from a defined party.")
-    print("For instance, inputs would be provided as SecretInteger through the NADA DSL framework.")
-    print("Once executed, the outputs would be the slope and intercept of the linear regression model.")
+    return outputs
+
+# Simulated NADA execution environment
+def run_nada_program():
+    num_parties = 100  # Number of participants (parties)
+    num_tickets = 10   # Number of tickets each participant can submit
+    max_number = 50    # Maximum number for each ticket
+
+    # Generate random tickets for each participant
+    tickets = [[random.randint(1, max_number) for _ in range(num_tickets)] for _ in range(num_parties)]
+
+    # Simulate selecting a winning ticket
+    winning_ticket = random.choice(random.choice(tickets))
+
+    return winning_ticket
+
+# Running the NADA program to determine the winning ticket
+winning_ticket = run_nada_program()
+
+# Display the winning ticket
+print(f"The winning ticket number is: {winning_ticket}")
